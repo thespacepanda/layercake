@@ -1,0 +1,27 @@
+{
+  "name": "layercake",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently -k yarn:watch:*",
+    "watch:ui": "elm-live src/Main.elm --hot --open --port=4000 --start-page=index.html --dir=public -- --debug --output=public/app.js",
+    "watch:css": "postcss styles/root.css -o public/styles.css -w",
+    "build:dev": "rm dist/* && cp public/* dist/ && yarn build:ui && yarn build:optimize && yarn build:css",
+    "build": "mkdir dist && cp -r public/* dist/ && yarn build:ui && yarn build:optimize && yarn build:css",
+    "build:css": "postcss styles/root.css -o dist/styles.css",
+    "build:ui": "elm make src/Main.elm --optimize --output=dist/app.js",
+    "build:optimize": "uglifyjs dist/app.js --compress \"pure_funcs='F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9',pure_getters,keep_fargs=false,unsafe_comps,unsafe\" | uglifyjs --mangle --output=dist/app.js",
+    "clean": "rm -rf dist/"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.0",
+    "cssnano": "^4.1.10",
+    "elm": "^0.19.1-3",
+    "elm-live": "^4.0.1",
+    "postcss-cli": "^6.1.3",
+    "postcss-import": "^12.0.1",
+    "tailwindcss": "^1.1.4",
+    "uglify-js": "^3.7.1"
+  }
+}
